@@ -1,0 +1,7 @@
+services\AuthentificationInterface.class
+services\AuthentificationManager.class
+services\SearchingInterface.class
+entities\Activity.class
+entities\Person.class
+test\SearchingTest.class
+services\SearchingManager.class
