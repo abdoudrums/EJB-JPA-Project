@@ -38,6 +38,7 @@ public class SearchingManager implements SearchingInterface {
 	public Person addPerson(Person p) {
 		if (em.find(Person.class, p.getIdPerson()) == null) {
 			em.persist(p);
+			System.err.println("addPerson witdh firstName=" + p.getFirstName());
 		} else {
 			em.merge(p);
 		}

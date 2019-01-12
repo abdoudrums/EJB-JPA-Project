@@ -42,7 +42,15 @@ public class Activity implements Serializable {
     @JoinColumn(name = "idPerson", nullable = false)
     //@ForeignKey(name="FK_PERSON_ACTIVITY")
     private Person person;
+    
+    
     	
+	public Activity() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	
+
 	public Integer getIdActivity() {
 		return idActivity;
 	}

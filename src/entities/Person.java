@@ -30,8 +30,8 @@ public class Person implements Serializable {
 	   @GeneratedValue(strategy = GenerationType.AUTO)
 	   private long idPerson;
 	   
-	 
-	   @Column(name = "first_name", length = 200, nullable = false)
+
+	@Column(name = "first_name", length = 200, nullable = false)
 	   private String firstName;
 	   
 	  
@@ -52,9 +52,28 @@ public class Person implements Serializable {
 	   @Column(name = "password", length = 200, nullable = false, unique=true)
 	   private String password;
 	   
-		@OneToMany(mappedBy = "person", cascade = { CascadeType.MERGE, CascadeType.REMOVE }, fetch = FetchType.LAZY)
-		@JoinTable(name = "activity")
+		@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+		@JoinTable(name = "Activity")
 		private List<Activity> activities;
+		
+		   public Person() {
+			}
+
+
+		   
+	public Person(String firstName, String lastName, String email, String website, Date birthDay, String password,
+				List<Activity> activities) {
+			super();
+			this.firstName = firstName;
+			this.lastName = lastName;
+			this.email = email;
+			this.website = website;
+			this.birthDay = birthDay;
+			this.password = password;
+			this.activities = activities;
+		}
+
+
 
 	public long getIdPerson() {
 		return idPerson;
@@ -119,5 +138,4 @@ public class Person implements Serializable {
 	public void setActivities(List<Activity> activities) {
 		this.activities = activities;
 	}
-	
 }
