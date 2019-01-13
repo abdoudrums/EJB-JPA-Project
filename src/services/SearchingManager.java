@@ -36,32 +36,45 @@ public class SearchingManager implements SearchingInterface {
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public Person addPerson(Person p) {
-		if (em.find(Person.class, p.getIdPerson()) == null) {
-			em.persist(p);
-			System.err.println("addPerson witdh firstName=" + p.getFirstName());
-		} else {
-			em.merge(p);
-		}
-		return p;
+		em.persist(p);
+		System.err.println("addPerson with  id =" + p.getIdPerson());
+		System.err.println("addPerson witdh firstName=" + p.getFirstName());
+		return (p);
 	}
+	
+	@Override
+    public Person updatePerson(Person p) {
+   	 	em.merge(p);
+        return(p);
+   	}
+	
+	@Override
+    public Person removePerson(long id) {
+   	 Person person = em.find(Person.class,id);
+   	 em.remove(person);
+   	 System.err.println("Delete  id =" + person.getIdPerson());
+   	 return person; 
+   		}
+	
+	
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Person> showAllPersons() {
-		Query query = em.createQuery("SELECT p FROM Person p");
-		List<Person> persons = query.getResultList();
-		return persons;
+	public List<Person> ViewAllPersons() {
+		Query query = em.createQuery("SELECT *FROM Person");
+		return query.getResultList();
+
 	}
 
 	@Override
-	public Person showPerson(Person person) {
+	public Person ViewOnePerson(Person person) {
 		return em.find(Person.class, person.getIdPerson());
 	}
 
 	// recherche par nom
 	@Override
-	public List<Person> findbyName(String lastname) {
-		Query query = em.createQuery("SELECT p FROM Person p WHERE p.lastName LIKE '%" + lastname + "%'");
+	public List<Person> SearchingPersonLastName(String lastname) {
+		Query query = em.createQuery("SELECT lastName FROM Person p WHERE p.lastName LIKE '%" + lastname + "%'");
 		if (query.getResultList().size() == 0)
 			return null;
 		@SuppressWarnings("unchecked")
@@ -71,8 +84,8 @@ public class SearchingManager implements SearchingInterface {
 
 	// recherche par prénom
 	@Override
-	public List<Person> findbyFirstName(String firstname) {
-		Query query = em.createQuery("SELECT p FROM Person p WHERE p.firstName LIKE '%" + firstname + "%'");
+	public List<Person> SearchingPersonFirstName(String firstname) {
+		Query query = em.createQuery("SELECT firstName FROM Person p WHERE p.firstName LIKE '%" + firstname + "%'");
 		if (query.getResultList().size() == 0)
 			return null;
 		@SuppressWarnings("unchecked")
@@ -83,8 +96,8 @@ public class SearchingManager implements SearchingInterface {
 	// recherche par titre d'activity
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Activity> findByTitle(String title) {
-		Query query = em.createQuery("SELECT a FROM Activity a WHERE a.title LIKE'%" + title + "%'");
+	public List<Activity> SearchingActivityTitle(String title) {
+		Query query = em.createQuery("SELECT title FROM Activity a WHERE a.title LIKE'%" + title + "%'");
 		;
 		if (query.getResultList().size() == 0)
 			return null;

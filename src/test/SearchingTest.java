@@ -25,17 +25,10 @@ public class SearchingTest {
 		assertNotNull(searchingManager);
 	}
 
-//	@Before
-//	public SearchingTest() throws Exception {
-//		
-//		EJBContainer.createEJBContainer().getContext().bind("inject", this);
-//		assertNotNull(searchingManager);
-//	}
-
 	@Test
 	public void testAddPerson() {
 		
-		person1.setFirstName("abdou");
+		person1.setFirstName("abderahim");
 		person1.setLastName("Hachemi");
 		person1.setEmail("abderahimhachemi@hotmail.com");
 		person1.setBirthDay(new Date(18 / 05 / 1992));
@@ -58,10 +51,10 @@ public class SearchingTest {
 //	}
 
 	@Test
-	public void findByNameTest() {
+	public void SearchingLastNameTest() {
 		Person person = new Person("hachemi", "abderahim", "abdou@hotmail.com", "google.fr", new Date(), "123", null);
 		searchingManager.addPerson(person);
-		List<Person> persons = searchingManager.findbyName(person.getLastName());
+		List<Person> persons = searchingManager.SearchingPersonLastName(person.getLastName());
 		assertNotNull(persons);
 		assertEquals(persons.size(), 1);
 	}
@@ -70,7 +63,7 @@ public class SearchingTest {
 	public void findByFirstNameTest() {
 		Person person2 = new Person("hachemiI", "Aabderahim", "Aabdou@hotmail.com", "Agoogle.fr", new Date(), "A123", null);
 		searchingManager.addPerson(person2);
-		List<Person> persons = searchingManager.findbyFirstName(person2.getFirstName());
+		List<Person> persons = searchingManager.SearchingPersonFirstName(person2.getFirstName());
 		assertNotNull(persons);
 		assertEquals(1, persons.size());
 	}

@@ -17,18 +17,14 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
-@Table(name = "Person",
-uniqueConstraints = {
-   @UniqueConstraint(columnNames = {
-      "first_name", "email"
-   })})
+@Table(name = "Person")
 
 @Entity(name = "Person")
 public class Person implements Serializable {
 	private static final long serialVersionUID = 1L;	
 	   @Id()
 	   @GeneratedValue(strategy = GenerationType.AUTO)
-	   private long idPerson;
+	   private long id;
 	   
 
 	@Column(name = "first_name", length = 200, nullable = false)
@@ -49,7 +45,7 @@ public class Person implements Serializable {
 	   @Column(name = "birth_day")
 	   private Date birthDay;
 	   
-	   @Column(name = "password", length = 200, nullable = false, unique=true)
+	   @Column(name = "password", length = 200, nullable = false, unique=false)
 	   private String password;
 	   
 		@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
@@ -58,7 +54,6 @@ public class Person implements Serializable {
 		
 		   public Person() {
 			}
-
 
 		   
 	public Person(String firstName, String lastName, String email, String website, Date birthDay, String password,
@@ -76,11 +71,11 @@ public class Person implements Serializable {
 
 
 	public long getIdPerson() {
-		return idPerson;
+		return id;
 	}
 
-	public void setIdPerson(long idPerson) {
-		this.idPerson = idPerson;
+	public void setIdPerson(long id) {
+		this.id = id;
 	}
 
 	public String getFirstName() {

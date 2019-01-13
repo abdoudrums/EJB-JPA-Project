@@ -8,10 +8,12 @@ import entities.Person;
 public interface SearchingInterface {
 	
 	Person addPerson(Person person);
-	List<Person> showAllPersons();
-	Person showPerson(Person person);
-	List<Person> findbyName(String lastname);
-	List<Person> findbyFirstName(String firstname);
-	List<Activity> findByTitle(String title);
+	Person updatePerson(Person person);
+	Person removePerson(long id);
+	List<Person> ViewAllPersons();
+	Person ViewOnePerson(Person person);
+	List<Person> SearchingPersonLastName(String lastname);
+	List<Person> SearchingPersonFirstName(String firstname);
+	List<Activity> SearchingActivityTitle(String title);
 
 }
