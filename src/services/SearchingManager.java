@@ -61,7 +61,7 @@ public class SearchingManager implements SearchingInterface {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Person> ViewAllPersons() {
-		Query query = em.createQuery("SELECT *FROM Person");
+		Query query = em.createQuery("SELECT p FROM Person p");
 		return query.getResultList();
 
 	}

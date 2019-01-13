@@ -2,6 +2,8 @@ package test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Date;
 import java.util.List;
 
@@ -23,36 +25,46 @@ public class SearchingTest {
 	public void setUp() throws Exception {
 		EJBContainer.createEJBContainer().getContext().bind("inject", this);
 		assertNotNull(searchingManager);
+		System.out.println("Hello");
 	}
 
-	@Test
-	public void testAddPerson() {
-		
-		person1.setFirstName("abderahim");
-		person1.setLastName("Hachemi");
-		person1.setEmail("abderahimhachemi@hotmail.com");
-		person1.setBirthDay(new Date(18 / 05 / 1992));
-		person1.setWebsite("www.google.com");
-		person1.setPassword("toto");
-		searchingManager.addPerson(person1);
-	}
-
-//	@Test
-//	public void showAllPersonsTest() {
-//
-////		List<Person>myList;
-////		myList=searchingManager.showPersons();
-////		assertNotNull(myList);
+//	@Before
+//	public SearchingTest() throws Exception {
 //		
-//		Person person3 = new Person("bhachemi", "babderahim", "babdou@hotmail.com", "bgoogle.fr", new Date(), "1b23", null);
-//		searchingManager.addPerson(person3);
-//		assertNotNull(searchingManager.showAllPersons());
-//		assertEquals(1, searchingManager.showAllPersons().size());
+//		EJBContainer.createEJBContainer().getContext().bind("inject", this);
+//		assertNotNull(searchingManager);
 //	}
 
+	
 	@Test
-	public void SearchingLastNameTest() {
-		Person person = new Person("hachemi", "abderahim", "abdou@hotmail.com", "google.fr", new Date(), "123", null);
+	public void testAddPerson() {
+		Person person1 = new Person("hachemiTest", "abderahimTest", "abderahimhachemi@hotmail.com", "google.fr", new Date(18 / 05 / 1992), "123", null);
+		searchingManager.addPerson(person1);
+		assertNotNull(person1);
+		
+	}
+
+	@Test
+	public void showAllPersonsTest() {
+		int nmbPerson = 3;
+
+		for(int i=1;i<=nmbPerson;i++) {
+			Person person = new Person("nomP"+i, "prenomP"+i, "nomP1prenomP"+i+"@hotmail.com", "siteP"+i+".fr", new Date(), "passP"+i, null);
+			searchingManager.addPerson(person);
+		}
+		
+		List<Person> persons=searchingManager.ViewAllPersons();
+		/*
+		 *Affichage de  searchingManager
+		 for(Person p : persons)
+			System.out.println("first name = "+p.getFirstName());
+		*/
+		assertTrue(persons.size()>= nmbPerson);
+	}
+
+	@Test
+	public void findByNameTest() {
+		Person person = new Person("hachemi", "abderahim", "abdou@hotmail.com", "google.fr", new Date(), "P123", null);
 		searchingManager.addPerson(person);
 		List<Person> persons = searchingManager.SearchingPersonLastName(person.getLastName());
 		assertNotNull(persons);
