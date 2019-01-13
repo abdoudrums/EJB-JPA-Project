@@ -10,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -48,8 +49,8 @@ public class Person implements Serializable {
 	   @Column(name = "password", length = 200, nullable = false, unique=false)
 	   private String password;
 	   
-		@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-		@JoinTable(name = "Activity")
+		@OneToMany()
+		@JoinColumn(name = "Person_id") 		
 		private List<Activity> activities;
 		
 		   public Person() {

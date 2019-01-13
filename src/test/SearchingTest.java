@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -12,13 +13,19 @@ import javax.ejb.embeddable.EJBContainer;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import entities.Activity;
 import entities.Person;
-import services.SearchingInterface;
+import services.AuthManagerI;
+import services.SearchingManagerI;
 
 public class SearchingTest {
 	@EJB
-	SearchingInterface searchingManager;
+	SearchingManagerI searchingManager;
 
+	@EJB
+	AuthManagerI authentification;
+	
 	Person person1 = new Person();
 
 	@Before
@@ -27,13 +34,6 @@ public class SearchingTest {
 		assertNotNull(searchingManager);
 		System.out.println("Hello");
 	}
-
-//	@Before
-//	public SearchingTest() throws Exception {
-//		
-//		EJBContainer.createEJBContainer().getContext().bind("inject", this);
-//		assertNotNull(searchingManager);
-//	}
 
 	
 	@Test
@@ -73,10 +73,53 @@ public class SearchingTest {
 
 	@Test
 	public void findByFirstNameTest() {
-		Person person2 = new Person("hachemiI", "Aabderahim", "Aabdou@hotmail.com", "Agoogle.fr", new Date(), "A123", null);
-		searchingManager.addPerson(person2);
-		List<Person> persons = searchingManager.SearchingPersonFirstName(person2.getFirstName());
-		assertNotNull(persons);
-		assertEquals(1, persons.size());
+		String firstname = "Chiheb";
+		int nmbPerson = 2;
+		
+		for(int i=1;i<=nmbPerson;i++) {
+			Person person = new Person(firstname, "guelmami"+i, "guelmami"+i+"@hotmail.com", "chiheb.fr", new Date(), "A123", null);
+			searchingManager.addPerson(person);
+		}
+		
+		List<Person> personsCh = searchingManager.SearchingPersonFirstName(firstname);
+		assertEquals(nmbPerson, personsCh.size());
 	}
+	
+	@Test
+	public void findByLastName() {
+		String lastname = "Guelmami";
+		int nmbPerson = 2;
+		
+		for(int i=1;i<=nmbPerson;i++) {
+			Person person = new Person("chiheb"+i, lastname, "chiheb"+i+"@hotmail.com", "chiheb.fr", new Date(), "A123", null);
+			searchingManager.addPerson(person);
+		}
+		
+		List<Person> personsG = searchingManager.SearchingPersonLastName(lastname);
+		assertEquals(nmbPerson, personsG.size());
+	}
+	
+	@Test
+	public void testFindByTitletheSameActivitiesOfPersons(){
+	Person person = new Person("chiheuhybuhb", "guel", "rahimhachemi@hotmail.com", "geoogle.fr", new Date(19 / 05 / 1992), "233", null);
+	System.out.println("id pp : "+person.getIdPerson());
+	Activity activity = new Activity();
+	activity.setTitle("Licence Professionnelle");
+	activity.setDescription("Technologies et programmation web");
+	activity.setNature("nature");
+	activity.setYear(new Date(2015));
+	activity.setWebSite("www.uca.com");
+	
+	person.setActivities(Arrays.asList(activity));
+	
+	
+	searchingManager.addPerson(person);
+
+	
+	
+	List<Person> activitiesFound = searchingManager.SearchingPersonByActivityTitle("Licence Professionnelle");
+	assertNotNull(activitiesFound);
+	assertEquals(activitiesFound.size(),1);
+	}
+
 }

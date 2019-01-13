@@ -10,6 +10,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -18,8 +19,8 @@ import entities.Person;
 
 @Stateless(name = "SearchingManager")
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class SearchingManager implements SearchingInterface {
-
+public class SearchingManagerImpl implements SearchingManagerI {
+	
 	@PersistenceContext(unitName = "myDatabase")
 	private EntityManager em;
 
@@ -32,16 +33,12 @@ public class SearchingManager implements SearchingInterface {
 	public void end() {
 		System.out.println("Stopping " + this);
 	}
-
-	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	@Override
 	public Person addPerson(Person p) {
 		em.persist(p);
-		System.err.println("addPerson with  id =" + p.getIdPerson());
-		System.err.println("addPerson witdh firstName=" + p.getFirstName());
 		return (p);
 	}
-	
 	@Override
     public Person updatePerson(Person p) {
    	 	em.merge(p);
@@ -54,9 +51,28 @@ public class SearchingManager implements SearchingInterface {
    	 em.remove(person);
    	 System.err.println("Delete  id =" + person.getIdPerson());
    	 return person; 
-   		}
+   	}
+	@Override
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	public Activity createActivity(Activity activity) {
+		em.persist(activity);
+		//return this.findActivity(activity)
+		return null;
+	}
 	
-	
+	@Override
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	public Activity updateActivity(Activity activity) {
+		return em.merge(activity);
+	}
+
+	@Override
+	public Activity removeActivity(Activity activity) {
+		Activity toDeleteActivity = em.find(Activity.class, activity.getIdActivity());
+		em.remove(toDeleteActivity);
+		return toDeleteActivity;
+	}
+
 
 	@Override
 	@SuppressWarnings("unchecked")
@@ -82,7 +98,7 @@ public class SearchingManager implements SearchingInterface {
 		return Persons;
 	}
 
-	// recherche par prénom
+	// recherche par prenom
 	@Override
 	public List<Person> SearchingPersonFirstName(String firstname) {
 		Query query = em.createQuery("SELECT firstName FROM Person p WHERE p.firstName LIKE '%" + firstname + "%'");
@@ -96,12 +112,32 @@ public class SearchingManager implements SearchingInterface {
 	// recherche par titre d'activity
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Activity> SearchingActivityTitle(String title) {
-		Query query = em.createQuery("SELECT title FROM Activity a WHERE a.title LIKE'%" + title + "%'");
-		;
-		if (query.getResultList().size() == 0)
-			return null;
-		List<Activity> Activities = (List<Activity>) query.getResultList();
-		return Activities;
+	public List<Person> SearchingPersonByActivityTitle(String title) {
+		Query query = em.createQuery("SELECT person FROM Activity a WHERE a.title LIKE'%" + title + "%'");
+		
+			List<Person> persons = query.getResultList();
+			System.out.println("findPersonsByTitle :"+persons.size());
+			return persons;
 	}
+
+	@Override
+	public Activity findActivity(Activity activity) {
+		Activity foundActivity = em.find(Activity.class, activity.getIdActivity());
+		return foundActivity;
+	}
+
+	@Override
+	public List<Activity> showActivities(Person p) {
+		Query query = null;
+		try {
+			query = em.createQuery("SELECT a FROM Activity a");
+		} catch (NoResultException e) {
+			return null;
+		}
+		if (query != null) {
+			return query.getResultList();
+		}
+		return null;
+	}
+
 }

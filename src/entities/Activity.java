@@ -14,13 +14,15 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.apache.openjpa.persistence.jdbc.ForeignKey;
+
 @Entity
 @Table(name = "Activity")
 public class Activity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue()
 	private Integer idActivity;
 
 	@Temporal(TemporalType.DATE)
@@ -38,9 +40,8 @@ public class Activity implements Serializable {
     @Column(name="webSite")
     private String webSite;
 
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    @JoinColumn(name = "idPerson", nullable = false)
-    //@ForeignKey(name="FK_PERSON_ACTIVITY")
+    @ManyToOne 
+    @JoinColumn(name = "Person_id", referencedColumnName = "id") 
     private Person person;
     
     
